@@ -14,8 +14,15 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: [true, "password required"] },
   department: String,
+
+  passwordChangedTime:{
+    type:String,
+    default: Date.now()
+  }
 });
+
 const userInfo= mongoose.model('user', userSchema);
+
 export default userInfo;
 
 //class UserData{

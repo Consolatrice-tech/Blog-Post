@@ -13,6 +13,16 @@ import mongoose from "mongoose";
     },
     timestamp:{type:String
     },
+    commentsId:[
+        {
+        type: mongoose.Schema.ObjectId,
+        ref: "comment"
+        }],
+    viewId : {
+        type: mongoose.Schema.ObjectId,
+        ref: "views"
+    },
+    
 });
 
 blogSchema.pre(/^find/, function(next){
@@ -22,9 +32,14 @@ blogSchema.pre(/^find/, function(next){
         select:"firstName  email"
 
     })
+    this.populate({
+        path:"commentsId",
+        select: "content user timestamp"
+    })
+    
     next();
 
 
 });
 const blogInfo = mongoose.model('blog', blogSchema);
-    export default blogInfo;
+export default blogInfo;

@@ -1,5 +1,6 @@
 import { check, validationResult } from "express-validator";
 import blogData from"../Model/blogModel";
+import Response from "../Helpers/response"
 class Validator {
 
     static verifyAccess = async (req, res, next) => {
@@ -10,22 +11,14 @@ class Validator {
         const blog = await blogData.findById(blogIdFromParams);
             
             if (!blog){
-                return res.status(404).json({
-                    status:404,
-                    message: "Blog Not Exist"
-
-                })
+                return Response.errorMessage (res, "Blog not exist", 404);
             
             }
 
-            else if (userIdFromToken = blog.userId._id)
+            else if (userIdFromToken == blog.userId._id)
             return next();
-                        
-    
-            return res.status(401).json({
-            status:401,
-            message:"You Are Not Authorised"
-    });
+
+            return Response.errorMessage(res, "You are not authorised", 401);
 }
 
     
@@ -52,15 +45,20 @@ class Validator {
     static newBlogpost(){
         return[check("title","title...").isLength({ max: 50})];
     }
+
+/**
+ * Validate Inputs
+ * @body data inputs 
+ * @return  {Object} error description or Return next middleware 
+ */
     static validateInput = (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const errormessage = errors.errors.map(e=> e.msg);
-            return res.status(400).json({
-                error:errormessage,
-                status:400,
-            });
+            
+            return Response.errorMessage(res, errormessage, 400);
         }
+        //console.log(e)
         return next();
     }
 }
