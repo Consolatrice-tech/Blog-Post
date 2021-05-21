@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   address: { type: String, default: "Rwanda" },
   email: { type: String, required: [true, "email required"] },
+  username: {type:String, required: [true, "username is required"] },
+  phonenumber: {type: String, required: [true, "Username is required"] },
   gender: { type: String, enum: ["male", "female"] },
   role: {
     type: String,
@@ -12,7 +14,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "user",
   },
-  password: { type: String, required: [true, "password required"] },
+  password: { type: String, 
+  required: [true, "password required"] },
   department: String,
 
   passwordChangedTime:{
@@ -42,3 +45,7 @@ export default userInfo;
 }
 }*/
 //export default UserData;
+
+
+
+

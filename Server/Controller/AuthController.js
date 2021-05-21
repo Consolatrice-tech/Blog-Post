@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { generateAuthToken } from "../Helpers/token";
-import UserData from "../Model/UserModel";
+import userInfo from "../Model/UserModel";
 import EmailHelper from "../Helpers/emailTemplate";
 import Response from "../Helpers/response";
 
@@ -15,7 +15,7 @@ class UserController {
     }= req.body
 
     const userId = req.body.userId;
-    const userDetails = await UserData.findById(userId);
+    const userDetails = await userInfo.findById(userId);
 
     if (bcrypt.compareSync(oldPassword, userDetails.password)){
 
@@ -25,7 +25,7 @@ class UserController {
 
         const password = bcrypt.hashSync(newPassword, 10);
         const passwordChangedTime = Date.now()
-        const userUpdated = await UserData.findByIdAndUpdate(userId,{
+        const userUpdated = await UserInfo.findByIdAndUpdate(userId,{
 
           password:password,
           passwordChangedTime: passwordChangedTime
@@ -59,19 +59,20 @@ class UserController {
 
     password = bcrypt.hashSync(password, 10);
 
-    const isEmailExist = await UserData.findOne({ email: email });
+    const isEmailExist = await UserInfo.findOne({ email: email });
 
     if (isEmailExist) {
       return Response.errorMessage(res, "Email is duplicated", 409);
     }
 
     req.body.password = password;
-    const data = await UserData.create(req.body);
+    const data = await UserInfo.create(req.body);
     console.log(data);
 
     if (!data) {
       return Response.errorMessage(res, "Account created failed", 417);
-    } else {
+    } 
+    else {
       let { password, ...dataWithOutPassword } = data._doc;
 
       await EmailHelper.userWelcomeEmail(dataWithOutPassword);
@@ -85,7 +86,7 @@ class UserController {
     // const User = await UserData(email, password);
     //Users.push(User);//adding information in array
     //const data = Users.find((User) => User.email === email);
-    const isUserExist = await UserData.findOne({ email: email });
+    const isUserExist = await userInfo.findOne({ email: email });
 
     // console.log(isUserExist);
 

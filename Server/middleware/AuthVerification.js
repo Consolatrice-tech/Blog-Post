@@ -1,6 +1,6 @@
 import {dataFromToken} from '../Helpers/Token';
-import userData from "../Model/UserModel.js";
 import Response from "../Helpers/response";
+import userInfo from '../Model/UserModel.js';
 
 export const verifyAuth = async (req, res, next) =>{
     const token = req.header("x-auth-token");
@@ -14,7 +14,7 @@ export const verifyAuth = async (req, res, next) =>{
 
         const user= dataFromToken(token).payload;
 
-        const data = await userData.findById(user.id);
+        const data = await userInfo.findById(user.id);
 
 if(!data)
 {

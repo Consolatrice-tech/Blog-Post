@@ -7,8 +7,7 @@ class commentController{
     static createComment = async (req, res)  => {
 
         let{content} = req.body;
-        let blogIdFromParams = req.params.id;
-
+        let blogIdFromParams = r 
         const newComment =await commentInfos.create(req.body);
 
         // console.log(newComment);
